@@ -11,10 +11,12 @@ import { AuthService } from './auth.service';
 import { Cookies } from './decorators/cookies.decorator';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessToken, SignInAuthDto } from './dto/sign-in-auth.dto';
+import { Public } from "./decorators/public.decorator";
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+  @Public()
   @ApiBody({
     type: SignInAuthDto,
   })
@@ -42,10 +44,12 @@ export class AuthController {
     });
     return { accessToken, expiresIn: 60 };
   }
+
   @ApiResponse({
     type: AccessToken,
     description: 'access Токен',
   })
+  @Public()
   @Post('refresh-token')
   async refreshToken(
     @Cookies('refresh') token: string,
@@ -64,6 +68,7 @@ export class AuthController {
     });
     return { accessToken };
   }
+
   @ApiResponse({
     type: Boolean,
     description: 'true',

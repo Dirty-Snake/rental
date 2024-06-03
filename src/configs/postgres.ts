@@ -1,6 +1,11 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { registerAs } from '@nestjs/config';
 import { User } from '../users/entities/user.entity';
+import { Equipment } from '../equipments/entities/equipment.entity';
+import { Tag } from '../tags/entities/tag.entity';
+import { Category } from '../categories/entities/category.entity';
+import { Role } from '../roles/entities/role.entity';
+import { Information } from '../informations/entities/information.entity';
 export default registerAs(
   'typeOrmConfig',
   (): TypeOrmModuleOptions => ({
@@ -13,7 +18,7 @@ export default registerAs(
     password: process.env.PG_PASS,
     database: process.env.PG_DB,
     //migrationsRun: true,
-    entities: [User],
+    entities: [User, Equipment, Tag, Category, Role, Information],
     synchronize: true,
   }),
 );

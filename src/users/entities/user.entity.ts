@@ -3,10 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Equipment } from '../../equipments/entities/equipment.entity';
+import { Role } from '../../roles/enums/role.enum';
 @Entity('users')
 export class User {
   @ApiProperty({
@@ -33,7 +36,7 @@ export class User {
   @Column()
   email: string;
 
-  @Column({ select: false })
+  @Column({ select: false, nullable: true })
   password: string;
 
   @ApiProperty({
@@ -54,20 +57,30 @@ export class User {
   @Column({ nullable: true })
   firstname: string;
 
-  @DeleteDateColumn()
-  deleteDate: Date;
+  @OneToMany(() => Equipment, (equipment) => equipment.user)
+  equipments: Equipment[];
 
   @ApiProperty({
-    description: 'Дата обновления',
+    enum: Role,
+    default: Role.USER,
+  })
+  @Column({ enum: Role, type: 'enum', default: Role.USER })
+  role: Role;
+
+  @DeleteDateColumn({ select: false })
+  delete_date: Date;
+
+  @ApiProperty({
     type: Date,
+    description: 'Дата обновления',
   })
   @UpdateDateColumn()
-  updateDate: Date;
+  update_date: Date;
 
   @ApiProperty({
-    description: 'Дата создания',
     type: Date,
+    description: 'Дата создания',
   })
   @CreateDateColumn()
-  createDate: Date;
+  create_date: Date;
 }

@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { InformationsService } from './informations.service';
 import { CreateInformationDto } from './dto/create-information.dto';
 import { UpdateInformationDto } from './dto/update-information.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('informations')
 @Controller('informations')
 export class InformationsController {
   constructor(private readonly informationsService: InformationsService) {}
@@ -23,7 +33,10 @@ export class InformationsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInformationDto: UpdateInformationDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateInformationDto: UpdateInformationDto,
+  ) {
     return this.informationsService.update(+id, updateInformationDto);
   }
 

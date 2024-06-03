@@ -1,10 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import * as bcrypt from 'bcrypt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { FindOptionsSelect, Repository } from 'typeorm';
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import * as bcrypt from "bcrypt";
+import { InjectRepository } from "@nestjs/typeorm";
+import { User } from "./entities/user.entity";
+import { FindOptionsSelect, Repository } from "typeorm";
+import { Role } from "../roles/enums/role.enum";
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -14,8 +16,9 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { username, email, password, firstname, lastname } = createUserDto;
     const user = new User();
-    const hashPassword = await this.hashPassword(password);
-    user.password = hashPassword;
+    if (password) {
+      user.password = await this.hashPassword(password);
+    }
     user.username = username;
     user.email = email;
     user.firstname = firstname;
@@ -37,7 +40,11 @@ export class UsersService {
     });
   }
 
-  async findOne(id: string, password?: boolean): Promise<User> {
+  async findOne(
+    id: string,
+    role?: Role,
+    password?: boolean,
+  ): Promise<User> {
     const select: FindOptionsSelect<User> = {};
     if (password) {
       select.username = true;
@@ -48,6 +55,7 @@ export class UsersService {
       select: select,
       where: {
         id: id,
+        role: role,
       },
     });
     if (!result) {
@@ -63,6 +71,7 @@ export class UsersService {
         username: true,
         email: true,
         password: true,
+        role: true,
       },
       where: {
         username: username,
@@ -70,11 +79,16 @@ export class UsersService {
     });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id, Role.USER);
+    user.firstname = updateUserDto?.firstname ?? user.firstname;
+    user.lastname = updateUserDto?.lastname ?? user.lastname;
+    user.email = updateUserDto?.email ?? user.email;
+    return await this.userRepository.save(user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.findOne(id, Role.USER);
+    return await this.userRepository.softRemove(user);
   }
 }

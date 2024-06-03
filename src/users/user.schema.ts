@@ -19,13 +19,13 @@ export const UserSchema: EntitySchema<User> = new EntitySchema<User>({
     password: {
       type: String,
     },
-    deleteDate: {
+    delete_date: {
       type: Date,
     },
-    updateDate: {
+    update_date: {
       type: Date,
     },
-    createDate: {
+    create_date: {
       type: Date,
     },
   },

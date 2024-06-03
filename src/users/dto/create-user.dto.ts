@@ -26,12 +26,12 @@ export class CreateUserDto {
     description: 'Password must be at least 8 characters long',
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MinLength(8, { message: 'Password must be at least 8 characters long' })
   @Matches(/^(?=.*[A-Z]).+$/, {
     message: 'Password must contain at least one uppercase letter',
   })
-  readonly password: string;
+  readonly password?: string;
 
   @ApiProperty({
     example: 'admin',
