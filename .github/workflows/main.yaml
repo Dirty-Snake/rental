@@ -16,7 +16,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER_NAME }}
           script: |
-            rm -rf rental/rental_back
+            rm -rf inventory/rental_back
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@v2.2.2
         with:
@@ -24,7 +24,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.SERVER_HOST }}
           REMOTE_USER: ${{ secrets.SERVER_USER_NAME }}
           source: "/"
-          target: "rental/rental_back"
+          target: "inventory/rental_back"
       - name: SSH into the server
         uses: appleboy/ssh-action@master
         with:
@@ -32,8 +32,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER_NAME }}
           script: |
-            cd /root/rental
-            docker compose stop api_gateway
-            docker compose build api_gateway
-            docker compose up api_gateway -d
-            docker system prune -af
+            cd /root/inventory
+            docker compose stop api_gateway_rental
+            docker compose build api_gateway_rental
+            docker compose up api_gateway_rental -d
