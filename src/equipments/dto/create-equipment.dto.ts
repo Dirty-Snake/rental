@@ -7,7 +7,7 @@ import {
   IsUUID,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class CreateEquipmentDto {
   @ApiProperty({
@@ -27,6 +27,7 @@ export class CreateEquipmentDto {
   description?: string;
 
   @ApiProperty()
+  @Type(() => Number)
   @IsNumber()
   @IsNotEmpty()
   price: number;
