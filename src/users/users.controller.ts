@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,6 +16,8 @@ import { User } from './entities/user.entity';
 import { FindUserDto } from './dto/find-user.dto';
 import { Roles } from '../roles/roles.decorator';
 import { Role } from '../roles/enums/role.enum';
+import { ApiPaginatedResponse } from '../common/decorators/api-paginated-response.decorator';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @ApiHeader({
   name: 'Authorization',
@@ -32,10 +35,16 @@ export class UsersController {
   async create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
-  @ApiResponse({ type: [User] })
+  @ApiPaginatedResponse(User)
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.usersService.findAll(
+      paginationDto?.page,
+      paginationDto?.limit,
+      {
+        create_date: 'ASC',
+      },
+    );
   }
 
   @ApiResponse({ type: User })

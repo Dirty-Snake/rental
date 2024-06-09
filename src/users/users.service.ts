@@ -4,8 +4,10 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import * as bcrypt from "bcrypt";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./entities/user.entity";
-import { FindOptionsSelect, Repository } from "typeorm";
+import { FindOptionsOrder, FindOptionsRelations, FindOptionsSelect, Repository } from "typeorm";
 import { Role } from "../roles/enums/role.enum";
+import { Tag } from "../tags/entities/tag.entity";
+import { PaginatedResultDto } from "../common/dto/paginated-result.dto";
 
 @Injectable()
 export class UsersService {
@@ -32,12 +34,25 @@ export class UsersService {
   async comparePassword(password, hash) {
     return await bcrypt.compare(password, hash);
   }
-  async findAll() {
-    return await this.userRepository.find({
-      order: {
-        username: 'ASC',
-      },
+  async findAll(
+    page = 1,
+    limit = 10,
+    order?: FindOptionsOrder<User>,
+    relations?: FindOptionsRelations<User>,
+  ): Promise<PaginatedResultDto<User>> {
+    const [data, total] = await this.userRepository.findAndCount({
+      relations: relations,
+      skip: (page - 1) * limit,
+      take: limit,
+      order: order,
     });
+    return <PaginatedResultDto<User>>{
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async findOne(
