@@ -67,6 +67,7 @@ export class Equipment {
   })
   @IsString()
   @IsOptional()
+  @Column({ nullable: true })
   size: string;
 
   @ApiProperty({
