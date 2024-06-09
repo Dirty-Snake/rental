@@ -33,6 +33,6 @@ jobs:
           username: ${{ secrets.SERVER_USER_NAME }}
           script: |
             cd /root/inventory
-            docker compose stop api_gateway_rental
-            docker compose build api_gateway_rental
-            docker compose up api_gateway_rental -d
+            docker compose stop api_rental
+            docker compose build api_rental
+            docker compose up api_rental -d
