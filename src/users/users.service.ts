@@ -1,13 +1,18 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import * as bcrypt from "bcrypt";
-import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "./entities/user.entity";
-import { FindOptionsOrder, FindOptionsRelations, FindOptionsSelect, Repository } from "typeorm";
-import { Role } from "../roles/enums/role.enum";
-import { Tag } from "../tags/entities/tag.entity";
-import { PaginatedResultDto } from "../common/dto/paginated-result.dto";
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import {
+  FindOptionsOrder,
+  FindOptionsRelations,
+  FindOptionsSelect,
+  Repository,
+} from 'typeorm';
+import { Role } from '../roles/enums/role.enum';
+import { Tag } from '../tags/entities/tag.entity';
+import { PaginatedResultDto } from '../common/dto/paginated-result.dto';
 
 @Injectable()
 export class UsersService {
@@ -55,11 +60,7 @@ export class UsersService {
     };
   }
 
-  async findOne(
-    id: string,
-    role?: Role,
-    password?: boolean,
-  ): Promise<User> {
+  async findOne(id: string, role?: Role, password?: boolean): Promise<User> {
     const select: FindOptionsSelect<User> = {};
     if (password) {
       select.username = true;

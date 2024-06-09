@@ -20,6 +20,7 @@ import { RentService } from './rent/rent.service';
 import { RentEquipmentDto } from './rent/dto/rent-equipment.dto';
 import { CurrentUserId } from '../common/decorators/current-user-id.decorator';
 import { ReturnEquipmentDto } from "./rent/dto/return-equipment.dto";
+import { FilterEquipmentDto } from "./dto/filter-equipment.dto";
 
 @ApiTags('equipments')
 @Controller('equipments')
@@ -39,10 +40,11 @@ export class EquipmentsController {
 
   @ApiPaginatedResponse(Equipment)
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
+  findAll(@Query() paginationDto: PaginationDto, @Query() filterEquipmentDto:FilterEquipmentDto) {
     return this.equipmentsService.findAll(
       paginationDto?.page,
       paginationDto?.limit,
+      filterEquipmentDto,
       {
         create_date: 'ASC',
       },

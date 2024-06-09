@@ -7,12 +7,14 @@ import {
   EntityManager,
   FindOptionsOrder,
   FindOptionsRelations,
+  FindOptionsWhere,
   Repository,
 } from 'typeorm';
 import { User } from '../users/entities/user.entity';
 import { Category } from '../categories/entities/category.entity';
 import { Tag } from '../tags/entities/tag.entity';
 import { PaginatedResultDto } from '../common/dto/paginated-result.dto';
+import { FilterEquipmentDto } from './dto/filter-equipment.dto';
 
 @Injectable()
 export class EquipmentsService {
@@ -53,12 +55,15 @@ export class EquipmentsService {
   async findAll(
     page = 1,
     limit = 10,
+    dto: FilterEquipmentDto,
     order?: FindOptionsOrder<Equipment>,
     relations?: FindOptionsRelations<Equipment>,
   ): Promise<PaginatedResultDto<Equipment>> {
+    const where = this.filter(dto);
     const [data, total] = await this.equipmentRepository.findAndCount({
       relations: relations,
       skip: (page - 1) * limit,
+      where: where,
       take: limit,
       order: order,
     });
@@ -69,6 +74,24 @@ export class EquipmentsService {
       limit,
       totalPages: Math.ceil(total / limit),
     };
+  }
+
+  private filter(dto: FilterEquipmentDto) {
+    const where: FindOptionsWhere<Equipment> = {};
+    if (dto?.category_id) {
+      where.category = {
+        id: dto.category_id,
+      };
+    }
+    if (dto?.tag_id) {
+      where.tag = {
+        id: dto.tag_id,
+      };
+    }
+    if (dto?.availability) {
+      where.availability = dto.availability;
+    }
+    return where;
   }
 
   async findOne(id: string) {
