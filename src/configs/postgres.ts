@@ -5,7 +5,8 @@ import { Equipment } from '../equipments/entities/equipment.entity';
 import { Tag } from '../tags/entities/tag.entity';
 import { Category } from '../categories/entities/category.entity';
 import { Role } from '../roles/entities/role.entity';
-import { Information } from '../informations/entities/information.entity';
+import { History } from '../histories/entities/history.entity';
+
 export default registerAs(
   'typeOrmConfig',
   (): TypeOrmModuleOptions => ({
@@ -18,7 +19,10 @@ export default registerAs(
     password: process.env.PG_PASS,
     database: process.env.PG_DB,
     //migrationsRun: true,
-    entities: [User, Equipment, Tag, Category, Role, Information],
+    entities: [User, Equipment, Tag, Category, Role, History],
     synchronize: true,
+    extra: {
+      options: '-c timezone=Europe/Moscow',
+    },
   }),
 );

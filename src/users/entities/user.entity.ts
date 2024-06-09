@@ -10,6 +10,8 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { Equipment } from '../../equipments/entities/equipment.entity';
 import { Role } from '../../roles/enums/role.enum';
+import { History } from '../../histories/entities/history.entity';
+
 @Entity('users')
 export class User {
   @ApiProperty({
@@ -59,6 +61,12 @@ export class User {
 
   @OneToMany(() => Equipment, (equipment) => equipment.user)
   equipments: Equipment[];
+
+  @OneToMany(() => History, (history) => history.user)
+  historiesUser: History[];
+
+  @OneToMany(() => History, (history) => history.admin)
+  historiesAdmin: History[];
 
   @ApiProperty({
     enum: Role,

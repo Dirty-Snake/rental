@@ -4,7 +4,6 @@ import { UsersModule } from './users/users.module';
 import { EquipmentsModule } from './equipments/equipments.module';
 import { CategoriesModule } from './categories/categories.module';
 import { TagsModule } from './tags/tags.module';
-import { InformationsModule } from './informations/informations.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import postgres from './configs/postgres';
@@ -13,6 +12,7 @@ import { RolesModule } from './roles/roles.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { RolesGuard } from './roles/roles.guard';
+import { HistoriesModule } from './histories/histories.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -23,8 +23,8 @@ import { RolesGuard } from './roles/roles.guard';
     EquipmentsModule,
     CategoriesModule,
     TagsModule,
-    InformationsModule,
     RolesModule,
+    HistoriesModule,
   ],
   controllers: [],
   providers: [

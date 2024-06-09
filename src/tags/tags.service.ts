@@ -3,9 +3,13 @@ import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Tag } from './entities/tag.entity';
-import { FindOptionsOrder, FindOptionsRelations, Not, Repository } from "typeorm";
-import { Category } from "../categories/entities/category.entity";
-import { PaginatedResultDto } from "../common/dto/paginated-result.dto";
+import {
+  FindOptionsOrder,
+  FindOptionsRelations,
+  Not,
+  Repository,
+} from 'typeorm';
+import { PaginatedResultDto } from '../common/dto/paginated-result.dto';
 
 @Injectable()
 export class TagsService {

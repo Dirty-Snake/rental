@@ -9,6 +9,7 @@ import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { IS_PUBLIC_KEY } from './decorators/public.decorator';
 import { Reflector } from '@nestjs/core';
+import { AuthPayload } from './interfaces/auth-payload.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -38,7 +39,7 @@ export class AuthGuard implements CanActivate {
       });
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
-      request['user'] = payload;
+      request['user'] = payload as AuthPayload;
     } catch {
       throw new UnauthorizedException();
     }

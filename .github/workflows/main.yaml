@@ -1,0 +1,39 @@
+name: Deploy to server
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: remove files
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.MAIN_SECRETS_KEY }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER_NAME }}
+          script: |
+            rm -rf inventory/rental_back
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@v2.2.2
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.MAIN_SECRETS_KEY }}
+          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
+          REMOTE_USER: ${{ secrets.SERVER_USER_NAME }}
+          source: "/"
+          target: "inventory/rental_back"
+      - name: SSH into the server
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.MAIN_SECRETS_KEY }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER_NAME }}
+          script: |
+            cd /root/rental
+            docker compose stop api_gateway
+            docker compose build api_gateway
+            docker compose up api_gateway -d
+            docker system prune -af
