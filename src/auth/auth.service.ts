@@ -3,7 +3,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../users/entities/user.entity';
-import { AuthTokenInterface } from "../../../rental/src/auth/interfaces/auth-token.interface";
+import { AuthTokenInterface } from './interfaces/auth-token.interface';
 
 @Injectable()
 export class AuthService {
@@ -57,7 +57,7 @@ export class AuthService {
       refreshToken,
     };
   }
-  async refreshToken(token: string): Promise<AuthTokenInterface>{
+  async refreshToken(token: string): Promise<AuthTokenInterface> {
     if (!token) {
       throw new UnauthorizedException();
     }
