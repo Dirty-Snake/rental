@@ -11,7 +11,6 @@ import {
   Repository,
 } from 'typeorm';
 import { Role } from '../roles/enums/role.enum';
-import { Tag } from '../tags/entities/tag.entity';
 import { PaginatedResultDto } from '../common/dto/paginated-result.dto';
 
 @Injectable()
@@ -48,6 +47,9 @@ export class UsersService {
     const [data, total] = await this.userRepository.findAndCount({
       relations: relations,
       skip: (page - 1) * limit,
+      where: {
+        role: Role.USER,
+      },
       take: limit,
       order: order,
     });
