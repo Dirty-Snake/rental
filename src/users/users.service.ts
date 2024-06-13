@@ -66,6 +66,7 @@ export class UsersService {
       select.username = true;
       select.email = true;
       select.password = true;
+      select.role = true;
     }
     const result = await this.userRepository.findOne({
       select: select,

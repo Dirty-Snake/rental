@@ -9,10 +9,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.use(cookieParser());
   const config = new DocumentBuilder()
-    .setTitle('InventApi example')
-    .setDescription('The InventApi API description')
+    .setTitle('SportRent example')
+    .setDescription('The SportRent API description')
     .setVersion('0.0.1')
-    .addTag('InventApi')
+    .addTag('SportRent Api')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);

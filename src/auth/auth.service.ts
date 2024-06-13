@@ -22,8 +22,6 @@ export class AuthService {
       throw new UnauthorizedException();
     }
     const { password, ...result } = user;
-    // TODO: Generate a JWT and return it here
-    // instead of the user object
     return await this.generateTokens(<User>result);
   }
   async generateTokens(user: User): Promise<AuthTokenInterface> {
@@ -45,6 +43,7 @@ export class AuthService {
           id: user.id,
           username: user.username,
           email: user.email,
+          role: user.role,
         },
         {
           secret: this.configService.get<string>('REFRESH_SECRET'),

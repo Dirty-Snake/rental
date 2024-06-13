@@ -53,6 +53,7 @@ export class RentService {
         await entityManager.save(history);
         equipment.rental_start_date = null;
         equipment.rental_end_date = null;
+        equipment.user = null;
         equipment.availability = true;
         return await entityManager.save(equipment);
       },

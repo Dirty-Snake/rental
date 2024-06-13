@@ -4,12 +4,12 @@ import { UpdateEquipmentDto } from './dto/update-equipment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equipment } from './entities/equipment.entity';
 import {
-  EntityManager,
+  EntityManager, Equal,
   FindOptionsOrder,
   FindOptionsRelations,
   FindOptionsWhere,
-  Repository,
-} from 'typeorm';
+  Repository
+} from "typeorm";
 import { User } from '../users/entities/user.entity';
 import { Category } from '../categories/entities/category.entity';
 import { Tag } from '../tags/entities/tag.entity';
@@ -88,7 +88,7 @@ export class EquipmentsService {
         id: dto.tag_id,
       };
     }
-    if (dto?.availability) {
+    if (dto?.availability !== undefined) {
       where.availability = dto.availability;
     }
     return where;
