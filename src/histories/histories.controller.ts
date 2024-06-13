@@ -18,7 +18,7 @@ export class HistoriesController {
       paginationDto?.page,
       paginationDto?.limit,
       {
-        create_date: 'ASC',
+        create_date: 'desc',
       },
       {
         user: true,

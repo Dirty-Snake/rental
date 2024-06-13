@@ -1,8 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { History } from './entities/history.entity';
-import { FindOptionsOrder, FindOptionsRelations, Repository } from "typeorm";
-import { PaginatedResultDto } from "../common/dto/paginated-result.dto";
+import {
+  FindOptionsOrder,
+  FindOptionsRelations,
+  IsNull,
+  Not,
+  Repository,
+} from 'typeorm';
+import { PaginatedResultDto } from '../common/dto/paginated-result.dto';
 
 @Injectable()
 export class HistoriesService {
@@ -20,6 +26,9 @@ export class HistoriesService {
     const [data, total] = await this.historyRepository.findAndCount({
       relations: relations,
       skip: (page - 1) * limit,
+      where: {
+        equipment: !IsNull(),
+      },
       take: limit,
       order: order,
     });
